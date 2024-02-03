@@ -24,6 +24,9 @@ end component;
 component system_management is 
 end component;
 
+component mem_controller is
+end component;
+
 begin
 
 impl_alu : alu;
@@ -37,5 +40,7 @@ impl_program_register : program_register;
 impl_stack_register : stack_register;
 
 impl_system_management : system_management;
+
+impl_mem_controller : mem_controller;
 
 end architecture;
