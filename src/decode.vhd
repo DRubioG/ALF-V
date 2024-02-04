@@ -70,9 +70,9 @@ begin
                         case type_r is
                         
                             when ADD_SUB_OP =>
-                                if inst(31 downto 25) = "0000000" then  
+                                if inst(30) = '0' then  
                                     operation <= (0=>'1', others=>'0');     -- ADD
-                                elsif inst(31 downto 25) = "0100000" then
+                                elsif inst(30) = '1' then
                                     operation <= (1=>'1', others=>'0');     -- SUB
                                 end if;
                             when SLL_OP => 
@@ -84,9 +84,9 @@ begin
                             when XOR_OP =>
                                 operation <= (5=>'1', others=>'0');     -- XOR
                             when SRL_SRA_OP =>
-                                if inst(31 downto 25) = "0000000" then  
+                                if inst(30) = '0' then  
                                     operation <= (6=>'1', others=>'0');     -- SRL
-                                elsif inst(31 downto 25) = "0100000" then
+                                elsif inst(30) = '1' then
                                     operation <= (7=>'1', others=>'0');     -- SRA
                                 end if;
                             when OR_OP =>
@@ -110,9 +110,9 @@ begin
                             when XORI_OP =>
                                 operation <= (5=>'1', others=>'0');     -- XORI
                             when SHAMT2_OP =>
-                                if inst(31 downto 25) = "0000000" then  
+                                if inst(30) = '0' then  
                                     operation <= (6=>'1', others=>'0');     -- SRLI
-                                elsif inst(31 downto 25) = "0100000" then
+                                elsif inst(30) = '1'then
                                     operation <= (7=>'1', others=>'0');     -- SRAI
                                 end if;
                             when ORI_OP =>
