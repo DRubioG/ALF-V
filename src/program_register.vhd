@@ -9,6 +9,7 @@ entity program_register is
     port (
         clk : in std_logic;
         rst_n : in std_logic;
+        en : in std_logic;
         address : in std_logic_vector(32 downto 0);
         value : out std_logic_vector(32 downto 0)
     );
@@ -26,7 +27,11 @@ begin
         if rst_n = '0' then
             value <= (others=>'0');
         elsif rising_edge(clk) then
-            value <= program_register(integer(address));
+            if en = '1' then
+                value <= program_register(integer(address));
+            elsif en = '0' then
+                value <= (others=>'0');
+            end if;
         end if;
     end process;
 end architecture;

@@ -5,6 +5,7 @@ entity mem_controller is
     Port ( 
         clk : in std_logic;
         rst_n : in std_logic;
+        en : in std_logic;
         rs1, rs2 : in std_logic_vector(4 downto 0);
         val1, val2 : in std_logic_vector(4 downto 0);
         val1_out, val2_out : out std_logic_vector(31 downto 0)
@@ -23,8 +24,11 @@ begin
         if rst_n = '0' then
             val1_out <= (others=>'0');
         elsif rising_edge(clk) then
-            val1_out <= regis(val1);
-        
+            if en = '1' then
+                val1_out <= regis(val1);
+            elsif en = '0' then
+                val1_out <= (others=>'0');
+            end if;
         end if;
     end process;
     
@@ -33,7 +37,11 @@ begin
         if rst_n = '0' then
             val2_out <= (others=>'0');
         elsif rising_edge(clk) then
-            val2_out <= regis(to_integer(val2));
+            if en = '1' then
+                val2_out <= regis(to_integer(val2));
+            elsif en = '0' then
+                val2_out <= (others=>'0');
+            end if;
         end if;
     end process;
 
