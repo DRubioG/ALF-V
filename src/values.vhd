@@ -2,19 +2,21 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 package values is
-    constant INSTRUCTIONS_WIDTH : integer := 6;
+    constant INSTRUCTIONS_WIDTH : integer := 7;
     constant ALU_WIDTH : integer := 10;
     constant DECODE_WIDTH : integer := 3;
+    constant WIDTH_MUX : integer := 3;
 
 
 -- Instructions constants
     subtype instructions_type is std_logic_vector(INSTRUCTIONS_WIDTH-1 downto 0);
     constant R_type     : instructions_type := "0110011";
-    constant I_type     : instructions_type := "0010011";
-    constant S_type     : instructions_type := "0010011";
-    constant SB_type    : instructions_type := "0010011";
-    constant U_type     : instructions_type := "0010011";
-    constant UJ_type    : instructions_type := "0010011";
+    constant I_type     : instructions_type := "0000011";
+    constant I2_type    : instructions_type := "0010011";
+    constant S_type     : instructions_type := "1110011";
+    constant B_type     : instructions_type := "1100011";
+    constant U_type     : instructions_type := "0010111";
+    constant J_type     : instructions_type := "1101111";
 
 
 -- Decoder constants

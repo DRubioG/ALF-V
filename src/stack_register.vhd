@@ -19,8 +19,8 @@ architecture arch_register of stack_register is
 begin
     process (clk, rst_n, regist)
     begin
-        if rst = '0' then
-            regist_data = (others=>'0');
+        if rst_n = '0' then
+            regist_data <= (others=>'0');
         elsif rising_edge(clk) then
             if en = '1' then
                 case regist is

@@ -23,10 +23,10 @@ entity alu is
 end entity;
 
 architecture arch_alu of alu is
-
+constant zero : unsigned(31 downto 0) := (others=>'0');
 begin
 
-    process(clk, rst_n, input_A, input_B) 
+    process(clk, rst_n, en, input_A, input_B) 
     begin
         if rst_n = '0' then
             output <= (others=>'0');
@@ -41,27 +41,56 @@ begin
                         output <= std_logic_vector(unsigned(input_A) - unsigned(input_B));
                         
                     when SLL_select =>    -- SLL
-                        output <= std_logic_vector(unsigned(input_A) sll integer(input_B));
+                        if input_B = (input_B'range=>'0') then
+                            output <= input_A;
+                        else
+                            output <= std_logic_vector(unsigned(input_A) sll to_integer(unsigned(input_B)));
+                        end if;
                     
                     when SLT_select =>    -- SLT
-                        output <= std_logic_vector(unsigned(input_A) slt integer(input_B));
+                        if input_B(WIDTH_DATA-1) > input_A(WIDTH_DATA-1) then
+                            output <= (others=>'0');
+                        elsif input_B(WIDTH_DATA-1) < input_A(WIDTH_DATA-1) then
+                            output <= (0=>'1', others=>'0');
+                        else
+                            if input_A(WIDTH_DATA-1) = '1' then
+                                if input_B(WIDTH_DATA-2 downto 0) < input_A(WIDTH_DATA-2 downto 0) then
+                                    output <= (0=>'1', others=>'0');
+                                else
+                                    output <= (others=>'0');
+                                end if;
+                            else
+                                if input_B(WIDTH_DATA-2 downto 0) > input_A(WIDTH_DATA-2 downto 0) then
+                                    output <= (0=>'1', others=>'0');
+                                else
+                                    output <= (others=>'0');
+                                end if;
+                            end if;
+                        end if;
                     
                     when SLTU_select =>    -- SLTU
-                        output <= std_logic_vector(unsigned(input_A) sltu integer(input_B));
+                        if input_B > input_A then
+                            output <= (0=>'1', others=>'0');
+                        else
+                            output <= (others=>'0');
+                        end if;
                     
                     when XOR_select =>    -- XOR
                         output <= input_A xor input_B;
                         
                     when SRL_select =>    -- SRL
-                        if input_B(4 downto 0) = "11111" then
+                        if input_B(4 downto 0) = (input_B(4 downto 0)'range=>'1') then --"11111" then
                             output <= (others=>'0'); 
-                        else
-                            output <= std_logic_vector(input_A(WIDTH_DATA downto 2**to_integer(unsigned(input_B(4 downto 0)))));
-                            output(2**to_integer(unsigned(input_B(4 downto 0)))-1 downto 0) <=  (others=>'0');
+                        else                            
+                            -- IMPROVE : output <= std_logic_vector(unsigned(input_A) srl 2**(to_integer(unsigned(input_B))));
                         end if;
                         
-                    when SRA_select =>    -- SRA
-                        output <= std_logic_vector(unsigned(input_A) sra 2**(to_integer(input_B(4 downto 0))));
+                    when SRA_select =>    -- SRL
+                        if input_B = (input_B'range=>'0') then
+                            output <= input_A;
+                        else
+                            output <= std_logic_vector(unsigned(input_A) srl to_integer(unsigned(input_B)));
+                        end if;
                         
                     when OR_select =>    -- OR
                         output <= input_A or input_B;
@@ -69,7 +98,8 @@ begin
                     when AND_select =>    -- AND
                         output <= input_A and input_B;
                         
-                    when others => null;
+                    when others => 
+                        output <= (others=>'0');
                 
                 end case;
             elsif en = '0' then

@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use ieee.numeric_std.all;
 
 entity mem_controller is
     Port ( 
@@ -25,7 +26,7 @@ begin
             val1_out <= (others=>'0');
         elsif rising_edge(clk) then
             if en = '1' then
-                val1_out <= regis(val1);
+                val1_out <= regis(to_integer(unsigned(val1)));
             elsif en = '0' then
                 val1_out <= (others=>'0');
             end if;
@@ -38,7 +39,7 @@ begin
             val2_out <= (others=>'0');
         elsif rising_edge(clk) then
             if en = '1' then
-                val2_out <= regis(to_integer(val2));
+                val2_out <= regis(to_integer(unsigned(val2)));
             elsif en = '0' then
                 val2_out <= (others=>'0');
             end if;

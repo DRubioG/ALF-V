@@ -1,6 +1,9 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
+library work;
+use work.values.all;
+
 entity decode is
     generic (
         WIDTH : integer := 32;
@@ -17,7 +20,7 @@ entity decode is
         rs2 : out std_logic_vector(4 downto 0);
         rd : out std_logic_vector(4 downto 0);
         imm : out std_logic_vector(10 downto 0);
-        operation : out std_logic_vector(3 downto 0);
+        operation : out std_logic_vector(9 downto 0);
         operation_ok : out std_logic
     );
 end entity;
@@ -25,7 +28,7 @@ end entity;
 architecture arch_decoder of decode is
 
 signal type_inst : std_logic_vector(6 downto 0);
-signal type_r : std_logic_vector(4 downto 0);
+signal type_r : std_logic_vector(2 downto 0);
 
 begin
     
@@ -81,8 +84,8 @@ begin
                                     operation <= AND_select;     -- AND
                             end case;
                             
-                        when I_type =>
-                            imm <= inst(31 downto 20);
+                        when I_type | I2_type =>
+                            imm <= inst(31 downto 21);
                             case type_r is
                             
                                 when ADDI_OP =>
@@ -113,7 +116,7 @@ begin
                                 when ANDI_OP =>
                                     operation <= AND_select;     -- ANDI
                             end case;
-                            
+                        when others=> null;
                     end case;    
                 end if;
             elsif en = '0' then

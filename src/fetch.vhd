@@ -9,7 +9,8 @@ entity fetch is
         en : in std_logic;
         inst : in std_logic_vector(31 downto 0);
         inst_out : out std_logic_vector(31 downto 0);
-        address : out std_logic_vector(31 downto 0);
+        address_input : in std_logic_vector(31 downto 0);
+        address_output : out std_logic_vector(31 downto 0);
         pc : in std_logic_vector(31 downto 0)
     );
 end entity;
@@ -19,12 +20,12 @@ begin
     process(clk, rst_n)
     begin
         if rst_n = '0' then
-            address <= (others=>'0');
+            address_output <= (others=>'0');
         elsif rising_edge(clk) then
             if en = '1' then
-                address <= std_logic_vector(unsigned(address)+unsigned(pc));
+                address_output <= std_logic_vector(unsigned(address_input)+unsigned(pc));
             elsif en = '0' then
-                address <= (others=>'0');
+                address_output <= (others=>'0');
             end if;
         end if;
     end process;
