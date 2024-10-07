@@ -1,7 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-package values is
+package package_constants is
     constant INSTRUCTIONS_WIDTH : integer := 7;
     constant ALU_WIDTH : integer := 10;
     constant DECODE_WIDTH : integer := 3;
